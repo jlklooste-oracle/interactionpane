@@ -14,7 +14,9 @@
     "zoom",
     "pinch",
     "drag",
-    "react"
+    "react",
+    "scrollwheel",
+    "gestures"
   ],
   "author": "Jeroen Kloosterman",
   "license": "ISC",

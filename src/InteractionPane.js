@@ -1,10 +1,57 @@
-// InteractionPane.js
+/**
+ * InteractionPane is a React component lets end users drag, pinch, and zoom using mouse (scrollwheel + mouse 
+ * buttons) on the desktop as well as hand gestures (pinch/zoom/drag) on mobile devices.
+ * Any children that you place inside of the InteractionPane will respond to the user interaction; they will 
+ * automatically be scaled/moved as required.
+ * For the developer, this abstracts away the complexity of handling various mouse and gesture events.
+ *
+ * Keep in mind that the div that responds to user input/gestures (named "userinputpane") will take the maximum 
+ * size of the parent component/div (left=0, top=0, right=0, bottom=0).
+ *
+ * Example usage (calling application):
+ * ...
+ * import InteractionPane from "./InteractionPane.js"; // Update the path
+ * ...
+ * const [scale, setScale] = useState(1); //by default start with original scale (100%)
+ * const [offset, setOffset] = useState({ x: 0, y: 0 }); //by default content is placed at top left corner of the interaction pane.
+ * ...
+ * return (
+ *   <InteractionPane
+ *       scale={scale}
+ *       setScale={setScale}
+ *       offset={offset}
+ *       setOffset={setOffset}>
+ *       <img src="https://pbs.twimg.com/profile_images/928271020842201088/oNUUBK5A_400x400.jpg" width="200px" style={{ position: "absolute", left: "200px" }}/>
+ *       <div
+ *         style={{
+ *           position: "absolute",
+ *           width: "400px",
+ *           height: "400px",
+ *           left: "0px",
+ *           top: "0px",
+ *           borderColor: "red",
+ *           borderStyle: "solid",
+ *         }}>
+ *       </div>
+ *       <div style={{ position: "absolute" }}>
+ *         <svg height="400" width="400">
+ *           <polygon points="0,200 200,200 100,0 0,200" class="triangle" />
+ *           <circle cx="300" cy="300" r="100" fill="blue" />
+ *         </svg>
+ *       </div>
+ *   </InteractionPane>
+ * );
+ * ...
+ */
 import React, { useState } from "react";
 
-const SCROLLWHEEL_FACTOR = 0.1; //Percentage of zoom related to scroll wheel
+const SCROLLWHEEL_FACTOR = 0.1; ////SCROLLWHEEL_FACTOR determines how quickly the scale will change in reaction to the scroll wheel.
 
 const InteractionPane = (props) => {
+  //Scale determines the size of the displayed children (this react to pinch/zoom movements).
+  //Offset determines the position of the displayed children (this respond to dragging movement).
   const { scale, setScale, offset, setOffset, children } = props;
+
   const [initialDistanceBetweenFingers, setInitialDistanceBetweenFingers] =
     useState(0);
   const [initialScale, setInitialScale] = useState(1);
@@ -13,24 +60,13 @@ const InteractionPane = (props) => {
   const [dragPositionStart, setDragPositionStart] = useState({ x: 0, y: 0 });
   const [dragPositionOffsetStart, setDragPositionOffsetStart] = useState({});
   const [isDragging, setIsDragging] = useState(false);
-  //const [scale, setScale] = useState(2);
-  //const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  // ... All the interaction state and methods go here ...
-  // e.g., initialDistanceBetweenFingers, initialScale, etc.
   function handlePointerDown(event) {
     console.log("pointerDown");
     const newDragPositionStart = { x: event.clientX, y: event.clientY };
     setDragPositionStart(newDragPositionStart); //Position start on the interactionpane
     setDragPositionOffsetStart({ ...offset }); //Position offset start original, before the drag action
     setIsDragging(true);
-    /*
-    if (mode === "mask") {
-      drawMaskStart(event);
-    }
-    if (mode === "delete") {
-    }
-    */
   }
 
   function handlePointerUp(event) {
@@ -38,7 +74,6 @@ const InteractionPane = (props) => {
   }
 
   function handlePointerMove(event) {
-    //if (mode === "move") {
     if (isDragging) {
       const dragPositionEnd = { x: event.clientX, y: event.clientY };
       const deltaX = dragPositionEnd.x - dragPositionStart.x;
@@ -48,24 +83,10 @@ const InteractionPane = (props) => {
         y: Math.round(dragPositionOffsetStart.y + deltaY),
       });
     }
-    /*
-    }
-    if (mode === "mask") {
-      setCursorPosition({
-        x: event.clientX,
-        y: event.clientY - 56,
-      });
-    }
-    if (mode === "mask") {
-      drawMaskDrag(event);
-    }
-    */
   }
 
   function handleTouchStart(event) {
-    //setOffsetStartLocation({ ...offset })
     if (event.touches.length >= 2) {
-      //alert(`event.touches (${event.touches[0].clientX},${event.touches[0].clientY}) (${event.touches[1].clientX},${event.touches[1].clientY})`)
       const distanceX = event.touches[1].clientX - event.touches[0].clientX;
       const distanceY = event.touches[1].clientY - event.touches[0].clientY;
       const initialDistance = Math.sqrt(
@@ -82,17 +103,16 @@ const InteractionPane = (props) => {
         x: centerX,
         y: centerY,
       });
-      //const imageCoordinateX = ((centerX - offset.x) / scale)
-      //const imageCoordinateY = ((centerY - offset.y) / scale)
       setInitialScale(scale);
       setInitialOffset({ ...offset });
-      //alert(`pinch/zoom started, initial touch center (${centerX}, ${centerY}), initial scale ${scale}, initial distance ${initialDistance} original offset ${offset.x}, ${offset.y} in image coordinate space x ${imageCoordinateX}, y ${imageCoordinateY}`)
     }
   }
 
-  //Handles two finger actions: Pinch/zoom + two finger move
-  //The action is initiated by handleTouchStart, and subsequently the following code is called
-  //while the fingers are on the screen.
+  /*
+   * Handles two finger actions: Pinch/zoom + two finger move
+   * The action is initiated by handleTouchStart, and subsequently the following code is called
+   * while the fingers are on the screen.
+   */
   function handleTouchMove(event) {
     if (event.touches.length >= 2) {
       //The following calculates how much the scale must changes (given the change in distance between the fingers)
@@ -143,9 +163,6 @@ const InteractionPane = (props) => {
   }
 
   function handleWheel(event) {
-    //console.log("wheel")
-    //console.log(event.deltaY)
-    //console.log(event.clientX, event.clientY)
     const initialScale = scale;
     const initialOffset = { ...offset };
     let newScale = 1;
@@ -174,7 +191,7 @@ const InteractionPane = (props) => {
       imageCoordinateX * newScale + initialOffset.x;
     const wouldBeNewScreenPositionY =
       imageCoordinateY * newScale + initialOffset.y;
-    //3. Calculate the different between the two (we want it to be zero)
+    //3. Calculate the difference between the two (we want it to be zero)
     const offsetAdjustmentX1 = event.clientX - wouldBeNewScreenPositionX;
     const offsetAdjustmentY1 = event.clientY - wouldBeNewScreenPositionY;
 
@@ -186,7 +203,7 @@ const InteractionPane = (props) => {
   }
 
   // Return the rendered component
-  // The userinputpane div takes the full screen (see left, top, right and bottom attributes), this is there to capture the user's mouse input.
+  // The userinputpane div takes the full screen (see left, top, right and bottom attributes), this is there to capture the user's mouse / finger gestures' input.
   // The child div of the interaction pane is the thing we move around and scale as a result of the actions.
   return (
     <div
@@ -206,6 +223,8 @@ const InteractionPane = (props) => {
         bottom: 0,
       }}
     >
+      {/* This is the div that is "moved around" using the offset and scaled automatically, in response to the user's mouse/finger gestures. 
+          Note how you can pass in any children that will automatically adapt to the required scale + offset. */}
       <div
         style={{
           position: "absolute",
