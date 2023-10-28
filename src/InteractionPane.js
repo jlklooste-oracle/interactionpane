@@ -1,13 +1,14 @@
 /**
- * InteractionPane is a React component lets end users drag, pinch, and zoom using mouse (scrollwheel + mouse 
- * buttons) on the desktop as well as hand gestures (pinch/zoom/drag) on mobile devices.
- * Any children that you place inside of the InteractionPane will respond to the user interaction; they will 
- * automatically be scaled/moved as required.
+ * @author Jeroen Kloosterman <jlklooste@gmail.com>
+ * 
+ * InteractionPane is a React component that allows end users to work with drag, pinch, and zoom using mouse
+ * (scrollwheel + mouse buttons) on the desktop as well as hand gestures (pinch/zoom/drag) on mobile devices.
+ * Any children places inside the InteractionPane will respond to the user interaction; they will automatically
+ * be scaled/moved as required.
  * For the developer, this abstracts away the complexity of handling various mouse and gesture events.
+ * The div that responds to user input/gestures will take the size of the parent component/div.
  *
- * Keep in mind that the div that responds to user input/gestures (named "userinputpane") will take the maximum 
- * size of the parent component/div (left=0, top=0, right=0, bottom=0).
- *
+ * @example
  * Example usage (calling application):
  * ...
  * import InteractionPane from "./InteractionPane.js"; // Update the path
