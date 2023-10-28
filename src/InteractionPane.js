@@ -22,7 +22,7 @@
  *       setScale={setScale}
  *       offset={offset}
  *       setOffset={setOffset}>
- *       <img src="https://pbs.twimg.com/profile_images/928271020842201088/oNUUBK5A_400x400.jpg" width="200px" style={{ position: "absolute", left: "200px" }}/>
+ *       <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" width="200px" style={{ position: "absolute", left: "200px" }}/>
  *       <div
  *         style={{
  *           position: "absolute",
