@@ -1,0 +1,25 @@
+{
+  "name": "interactionpane",
+  "version": "1.0.0",
+  "description": "React component for drag, zoom, pinch. Support mouse + scroll wheel and finger gestures for mobile devices.",
+  "main": "src/InteractionPane.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlklooste-oracle/interactionpane.git"
+  },
+  "keywords": [
+    "zoom",
+    "pinch",
+    "drag",
+    "react"
+  ],
+  "author": "Jeroen Kloosterman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jlklooste-oracle/interactionpane/issues"
+  },
+  "homepage": "https://github.com/jlklooste-oracle/interactionpane#readme"
+}
