@@ -19,7 +19,7 @@
     "gestures"
   ],
   "author": "Jeroen Kloosterman",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jlklooste-oracle/interactionpane/issues"
   },
