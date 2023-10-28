@@ -16,8 +16,8 @@ Note that the div that the component will take the full space of its parent (it 
 
 Here are two demonstration videos showcasing the capabilities and usage of `InteractionPane`:
 
-1. [Desktop (using mouse)](https://www.youtube.com/watch?v=YOUR_VIDEO_LINK_1)
-2. [Mobile (hand gestures)](https://www.youtube.com/watch?v=YOUR_VIDEO_LINK_2)
+1. [Desktop (using mouse)](https://youtu.be/efzbza1Hb4M?si=sEVDXQ6RdXDbiymC)
+2. [Mobile (hand gestures)](https://youtube.com/shorts/rS63jquhPO8?si=uVZ9XR_naHBnh6fn)
 
 ## Installation
 
