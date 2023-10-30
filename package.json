@@ -1,6 +1,6 @@
 {
   "name": "interactionpane",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React component for drag, zoom, pinch. Support mouse + scroll wheel and finger gestures for mobile devices.",
   "main": "dist/index.js",
   "scripts": {

@@ -1,28 +1,34 @@
 /**
  * @author Jeroen Kloosterman <jlklooste@gmail.com>
- * 
+ *
  * InteractionPane is a React component that allows end users to work with drag, pinch, and zoom using mouse
  * (scrollwheel + mouse buttons) on the desktop as well as hand gestures (pinch/zoom/drag) on mobile devices.
  * Any children places inside the InteractionPane will respond to the user interaction; they will automatically
  * be scaled/moved as required.
  * For the developer, this abstracts away the complexity of handling various mouse and gesture events.
  * The div that responds to user input/gestures will take the size of the parent component/div.
+ * See also https://medium.com/@jlklooste/building-a-react-component-for-zoom-drag-for-both-desktop-and-mobile-b9b320521f13 for an explanation.
  *
  * @example
  * Example usage (calling application):
- * ...
- * import InteractionPane from "./InteractionPane.js"; // Update the path
- * ...
- * const [scale, setScale] = useState(1); //by default start with original scale (100%)
- * const [offset, setOffset] = useState({ x: 0, y: 0 }); //by default content is placed at top left corner of the interaction pane.
- * ...
- * return (
- *   <InteractionPane
+ * import InteractionPane from "interactionpane";
+ * import React, { useState } from "react";
+ *
+ * function App() {
+ *   const [scale, setScale] = useState(1);
+ *   const [offset, setOffset] = useState({ x: 0, y: 0 });
+ *
+ *   return (
+ *     <InteractionPane
  *       scale={scale}
  *       setScale={setScale}
  *       offset={offset}
  *       setOffset={setOffset}>
- *       <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" width="200px" style={{ position: "absolute", left: "200px" }}/>
+ *       <img
+ *         src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+ *         width="200px"
+ *         style={{ position: "absolute", left: "200px" }}
+ *       />
  *       <div
  *         style={{
  *           position: "absolute",
@@ -40,9 +46,11 @@
  *           <circle cx="300" cy="300" r="100" fill="blue" />
  *         </svg>
  *       </div>
- *   </InteractionPane>
- * );
- * ...
+ *     </InteractionPane>
+ *   );
+ * }
+ *
+ * export default App;
  */
 import React, { useState } from "react";
 
@@ -170,36 +178,22 @@ const InteractionPane = (props) => {
     if (event.deltaY > 0) newScale = initialScale * (1 - SCROLLWHEEL_FACTOR);
     else newScale = initialScale * (1 + SCROLLWHEEL_FACTOR);
     setScale(newScale);
-
-    //The following adapts the offset in such a way that we zoom in on point where the scroll wheel is used
-    //1. Take the center, and convert it from screen coordinate space to image coordinate space
+    //1. Take the center, and convert it from screen coordinate space to image coordinate space.
     const imageCoordinateX = (event.clientX - initialOffset.x) / initialScale;
     const imageCoordinateY = (event.clientY - initialOffset.y) / initialScale;
-    console.log(
-      "interaction pane coordinates, image coordinates",
-      event.clientX,
-      event.clientY,
-      imageCoordinateX,
-      imageCoordinateY
-    );
-    console.log(
-      "imageCoordinateX, imageCoordinateY",
-      imageCoordinateX,
-      imageCoordinateY
-    );
-    //2. Calculate where this center would end up, given the new scale
-    const wouldBeNewScreenPositionX =
-      imageCoordinateX * newScale + initialOffset.x;
-    const wouldBeNewScreenPositionY =
-      imageCoordinateY * newScale + initialOffset.y;
-    //3. Calculate the difference between the two (we want it to be zero)
-    const offsetAdjustmentX1 = event.clientX - wouldBeNewScreenPositionX;
-    const offsetAdjustmentY1 = event.clientY - wouldBeNewScreenPositionY;
-
+    //2. The following adapts the offset in such a way that we zoom in on point where the scroll wheel is used.
+    const newOffsetX =
+      initialOffset.x +
+      initialScale * imageCoordinateX -
+      newScale * imageCoordinateX;
+    const newOffsetY =
+      initialOffset.y +
+      initialScale * imageCoordinateY -
+      newScale * imageCoordinateY;
     //Finally, apply the adjustment
     setOffset({
-      x: initialOffset.x + offsetAdjustmentX1,
-      y: initialOffset.y + offsetAdjustmentY1,
+      x: newOffsetX,
+      y: newOffsetY,
     });
   }
 
